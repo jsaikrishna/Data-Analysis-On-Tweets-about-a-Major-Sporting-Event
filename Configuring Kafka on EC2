@@ -53,13 +53,13 @@ we will need consumer key, consumer secret(API secret), access token, access tok
 For my app, IPL Stream kafka
 
 Consumer key:
-XF2v4uI03sYMAd3uk3FWLp3Kx
+// Insert the consumer key obtained here
 
 Consumer Secret(API Secret)
-zi1S8gxw5IyN3eujYyvjbPyiZkAI7fjs7Ep0v0oOhnzrSVFAWe
+// Insert the consumer secret obtained here
 
 Access Token
-235968398-Ibd22neLKaai49EzgY9AVvjIeS5CJlamSV2BfBwK
+// Insert the Access Token obtained here
 
 
 Access Token Secret
