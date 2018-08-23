@@ -1,0 +1,70 @@
+Setting up custom UI in kibana
+
+We have used india.geojson file which allows us to define custom geo boundaries.
+
+geojson is the a json file that contains one or more geoshapes that are specified in a standardized format. Geoshape is an array of points that represents latitudes and longitudes to form a polygon
+
+In order to enable the custom map, we need to configure some custome settings in kibana.yaml file. Add the following code in the kibana.yml file. The code has url from where the Kibana can retreive the geojson file. 
+
+The field name in the below code tells Kibana how to take the documents in the Elastic search and then figure out which shapes in the geojson file it needs to place that document for the aggregation results to be displayed.
+
+
+# Custom Region Maps
+regionmap:
+  layers:
+     - name: "Indian States"
+       url: "http://localhost:8000/in_state.geojson"
+       attribution: "https://exploratory.io/maps"
+       fields:
+          - name: "STATE_NAME"
+            description: "State Name"
+
+
+Create a directory named geojson and place the geojson file in that directory. We have to serve the geojson file from the web server as we have defined the url above. We have used Node package manager(npm) tool for acheiving the aforementioned thing. 
+
+Steps involved in the process are
+
+1)Before installing the server, we have to install the node.json, we have to refresh the local package index first and then install from the repositories.
+
+sudo apt-get update
+sudo apt-get install nodejs
+
+2)Once the above prerequisite packages are installed, we can install the nodejs package manager using the following command. This will allow us to install modules and packages to use with Node.js
+
+sudo apt-get install npm
+
+--
+
+Once the npm is installed, http-server can be installed using the npm package manager using the following command.
+The below command will install the http-server globally so that it can run from the command line.
+
+npm install http-server -g
+
+This can be used by using the following syntax.
+
+http-server [path] [options]
+
+Here [path] defaults to ./public if that folder exists, elase iy defaults to ./
+
+---
+
+Once the HTTP - Server has been installed, we have to go to the directory in which the geojson file is present and then start the http server using the follosing command.
+
+http-server --cors='*' -p 8000
+
+We can test this by opening http://localhost:8000 from the browser. We should be able to see the geojson files that are present in the directory.
+
+
+--
+
+Postman is a HTTP client used for testing web services. We are using postman to create indexes for the elastic search and kibana.
+
+Create a PUT request.
+
+Use connect type as "application.json"
+
+We have used the chrome extension of postman for this purpose.
+
+---
+
+

@@ -1,0 +1,61 @@
+1. Installation
+
+Run the following commands to download and setup elastic search on the system
+
+sudo apt-get update
+
+wget https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/deb/elasticsearch/6.2.4/elasticsearch-6.2.4.deb
+
+sudo dpkg -i elasticsearch-6.2.4.deb
+
+sudo systemctl enable elasticsearch.service
+
+2. Configuring Elasticsearch
+
+Go to /etc/elasticsearch directory and open elasticsearch.yml file.
+Configure node name, cluster names, path to the data. Set node.host to 0.0.0.0.
+
+After configuring, run "sudo systemctl restart elasticsearch"
+
+Check the status of elastic search using the following command:
+ 
+curl -X GET 'http://localhost:9200'
+
+3. Create Index
+
+Send a POST request to the elastic search using the following URL with the given request body
+
+URL: host-ip:9200/indiastates
+
+Request Body:
+{
+  "settings": {
+    "number_of_shards": 1,
+    "number_of_replicas": 0
+  },
+  "mappings": {
+    "doc": {
+      "properties": {
+        "Name": {
+          "type": "keyword"
+        },
+        "Population": {
+          "type": "integer"
+        }
+      }
+    }
+  }
+}
+
+4. Create and update documents
+
+Once the index is created, you can create or update documents in this index by sending a POST request.
+Eg:
+
+URL: host-ip:9200/indiastates/doc/dl
+
+Request Body:
+{
+  "Name": "Chhattisgarh",
+  "Count": 77578
+}

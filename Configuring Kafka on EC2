@@ -1,0 +1,71 @@
+Configuring KAFKA on EC2
+---------------------
+Launch instance of EC2 and make a note of public and private IPs of those instances
+
+broker ip
+172.31.43.18
+35.161.163.235
+
+consumer ip
+172.31.37.164
+18.236.96.59
+
+First configure java in the EC2 instances.
+
+1)Running zookeeper
+bin/zookeeper-server-start.sh config/zookeeper.properties
+
+Before running the kafka server, we have to set the server.properties in config folder of kafka, we have to add internal IP(private IP) in the properties file
+
+2)Running kafka server
+bin/kafka-server-start.sh config/server.properties
+
+If we try this command, then we will face the memory issue, so we can use the following commands to overcome the issue
+
+export KAFKA_HEAP_OPTS="-Xmx512M -Xms512M"
+
+KAFKA_HEAP_OPTS="-Xmx512M -Xms512M" bin/kafka-server-start.sh config/server.properties
+
+
+
+3)Create a topic (Run the below command in kafka directory)
+bin/kafka-topics.sh --create --zookeeper <zookeepr ip aaddress>:2181 --replication-factor 1 --partitions 1 --topic twitterdata
+
+bin/kafka-topics.sh --create --zookeeper 172.31.43.18:2181 --replication-factor 1 --partitions 1 --topic twitterdata
+
+4)We can now see the topic if we run the list topic command
+bin/kafka-topics.sh --list --zookeeper 172.31.43.18:2181
+
+5)create a producer
+bin/kafka-console-producer.sh --broker-list 172.31.43.18:9092 --topic twitterdata
+
+6)Start a consumer (Run in another instance)
+bin/kafka-console-consumer.sh --zookeeper 172.31.43.18:2181 --topic twitterdata --from-beginning
+
+-------------------------------------------------------------
+
+Creating a Twitter App on Twitter
+
+We can create an app from https://apps.twitter.com/
+
+we will need consumer key, consumer secret(API secret), access token, access token secret
+
+For my app, IPL Stream kafka
+
+Consumer key:
+XF2v4uI03sYMAd3uk3FWLp3Kx
+
+Consumer Secret(API Secret)
+zi1S8gxw5IyN3eujYyvjbPyiZkAI7fjs7Ep0v0oOhnzrSVFAWe
+
+Access Token
+235968398-Ibd22neLKaai49EzgY9AVvjIeS5CJlamSV2BfBwK
+
+
+Access Token Secret
+
+
+
+
+
+

@@ -1,0 +1,141 @@
+First Launch of 3 instances in AWS
+
+#change the hostnames
+
+sudo hostname zookeeper
+sudo hostname nimbus
+Sudo hostname supervisor
+
+#Modify /etc/hosts file and add private IPS of master and slave Node
+
+sudo vim /etc/hosts
+<private IP> zookeeper
+<private IP> nimbus
+<private IP> supervisor
+
+#Generate Keys
+ssh-keygn -t dsa -P ‘’-f  ~/.ssh/id_dsa
+sudo cat ~/.ssh/id_dsa.pub >> ~/.ssh/authorized_keys
+
+#Open authorized keys and copy authorized keys of each node
+sudo vim ~/.ssh/authorized_keys
+
+#Save host key fingerprints by connecting to every node using SSH
+ssh zookeeper
+ssh nimbus
+ssh supervisor
+
+#Java Installation
+#Set Properties
+
+sudo apt-get -q -y install python-software-properties
+sudo apt-get-repository -y ppa:webupd8team/java
+sudo apt-get -q -y update
+
+#State that you accepted the license
+
+echo debconf shared/accepted-oracle-license-v1-1 select true | sudo debconf-set-selections
+echo debconf shared/accepted-oracle-license-v1-1 seen true | sudo debconf-set-selections
+
+
+#Install Oracle Java7
+sudo apt-get -q -y install oracle-java7-installer
+
+#Update environment variable
+sudo bash -c “echo JAVA_HOME=/usr/lib/jvm/java-7-oracle/ >>  /etc/enviroment”
+
+#Zookeeper Installation
+#Create a file
+sudo vim /etc/apt/sources.list.d/cloudera.list
+
+#Add this to file 
+deb [arch=amd64] http://archive.cloudera.com/cdh4/ubuntu/precise/amd64/cdh precise-cdh4 contrib
+deb-src http://archive.cloudera.com/cdh4/ubuntu/precise/amd64/cdh precise-cdh4 contrib
+
+sudo apt-get -q -y update
+sudo apt-get install zookeeper zookeeper-server
+
+cd /usr/lib/zookeeper/bin/
+sudo ./zkServer.sh start
+
+#Check if zookeeper is working
+echo ruok | nc zookeeper 2181
+echo stat | nc zookeeper 2181
+
+#Install Required Packages
+sudo apt-get -q -y install build-essential 
+sudo apt-get -q -y install uuid-dev 
+sudo apt-get -q -y install git 
+sudo apt-get -q -y install pkg-config lib tool autoconf automake
+sudo apt-get -q -y install unzip
+
+#ZeroMQ Installation
+
+wget http://download.zeromq.org/zeromq-2.1.7.tar.gz
+tar -xzf zeromq-2.1.7.tar.gz
+cd zeromq-2.1.7
+./configure 
+sudo
+sudo make install
+
+#JZMQ Installation
+export JAVA_HOME=/usr/lib/jvm/java-7-oracle
+
+Git-clone https://github.com/nathanmarz/jzmq.git
+cd jzmq
+cd src
+
+touch classdist_noinst.stamp
+CLASSPATH=.:./.:$CLASSPATH javac -d .org/zeromq/ZMQ.java.org/zeromq/ZMQException.java.org/zeromq/ZMQQueue.java.org/zeromq
+ZMQForwarder.java.org/zeromq/ZMQStreamer.java
+
+
+cd ..
+./autogen.sh
+./configure
+make
+sudo make install
+
+
+#Storm Installation
+
+wget https://dl.dropbox.xom/u/133901206/storm-0.8.2.zip
+unzip storm-0.8.2.zip
+sudo ln -s storm-0.8.2.zip storm
+
+vim .bashsrc
+PATH=$PATH:”/home/ubuntu/storm”
+source .bashsrc
+
+
+#Set Strom/config/storm.yaml as follows
+
+storm.zookeeper.servers:
+	-“zookeeper”
+
+nimbus.host:”nimbus”
+
+storm.local.dir: “/home/ubuntu/stormlocal”
+
+#—(Where zookeeper and nimbus are Hostnames)
+
+#create storm local dir
+cd /home/ubuntu
+mkdir stormlocal
+
+#Launch nimbus
+
+cd storm
+bin/storm nimbus
+
+#Launch UI
+bin/storm ui
+
+
+
+
+
+
+
+
+
