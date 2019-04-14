@@ -13,3 +13,6 @@ Technologies Used:
 * Apache Storm
 * Elastic Search
 * Kibana
+* AWS - EC2
+* Scala
+
