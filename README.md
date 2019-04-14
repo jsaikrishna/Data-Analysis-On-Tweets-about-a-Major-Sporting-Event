@@ -1,3 +1,15 @@
 # Data Analysis On Tweets about a Major Sporting Event
 
-Big-data Style Implementation of predicting the most supportive team during match, categorize the active match supporters and to list the top trending players of the tournament.
+A Big-data Style Implementation of Data Analysis on Tweet. Important Goals of the work are:
+
+* predicting the most supportive team of the entire tournament
+* categorize the active match supporters for each match
+* Finf & list the top trending players of the tournament.
+
+Technologies Used:
+
+* Twitter-API
+* Apache Kafka
+* Apache Storm
+* Elastic Search
+* Kibana
